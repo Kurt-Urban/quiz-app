@@ -1,43 +1,40 @@
-import { createAction, handleAction, handleActions } from "redux-actions";
+import { createAction, handleActions } from "redux-actions";
 import axios from "../../axios";
 
 import history from "../../history";
 
 const base = "QUIZ_";
 
-const INITAL_STATE = {
-  question: "",
-  options: [],
-  answer: "",
-  votes: null,
-};
+const INITAL_STATE = [];
 
-export const fetchedQuizes = createAction(`${base}FETCHED_QUIZES`);
-export const createNewQuiz = createAction(`${base}CREATE_QUIZ`);
+export const fetchedQuiz = createAction(`${base}FETCHED_QUIZ`);
+export const createNewQuestion = createAction(`${base}CREATE_QUESTION`);
+// export const addVote = createAction(`${base}ADD_VOTE`); Future Feature
 
-export const fetchQuizes = () => async (dispatch) => {
+export const fetchQuiz = () => async (dispatch) => {
   const response = await axios.get("/quizes");
-  dispatch(fetchedQuizes(response.data[0]));
+  console.log(response.data);
+  dispatch(fetchedQuiz(response.data));
 };
 
-export const createQuiz = (formValues) => (dispatch) => {
+export const createQuestion = (formValues) => (dispatch) => {
   axios
     .post("/new", {
       question: formValues.question,
       options: formValues.options.split(","),
       answer: formValues.answer,
-      votes: null,
+      img: formValues.img,
     })
-    .then((response) => {
-      dispatch(createNewQuiz(response));
-      history.push("/new");
+    .then(() => {
+      dispatch(createNewQuestion());
+      history.push("/");
     });
 };
 
 export default handleActions(
   {
-    [fetchedQuizes]: (state, { payload }) => ({ ...state, ...payload }),
-    [createNewQuiz]: () => ({ ...INITAL_STATE }),
+    [fetchedQuiz]: (state, { payload }) => [...state, ...payload],
+    [createNewQuestion]: () => ({ ...INITAL_STATE }),
   },
   INITAL_STATE
 );

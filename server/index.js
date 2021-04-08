@@ -1,3 +1,4 @@
+const env = require("dotenv").config().parsed;
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -10,7 +11,7 @@ app.use(bodyParser());
 
 mongoose
   .connect(
-    "mongodb+srv://kurban:12397@cluster0.hxtev.mongodb.net/mongo-database?retryWrites=true&w=majority",
+    `mongodb+srv://${env.DB_USER}:${env.DB_PASSWORD}@cluster0.hxtev.mongodb.net/${env.DB_NAME}?retryWrites=true&w=majority`,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .catch((err) => console.log(err));
@@ -21,12 +22,13 @@ const quizModel = mongoose.model(
     question: String,
     answer: String,
     options: Array,
-    votes: Number,
+    img: String,
+    votes: Array,
   })
 );
 
 app.get("/quizes", (req, res) => {
-  quizModel.find({}, (error, result) => {
+  quizModel.aggregate([{ $sample: { size: 10 } }], (error, result) => {
     console.log(result);
     res.send(result);
   });

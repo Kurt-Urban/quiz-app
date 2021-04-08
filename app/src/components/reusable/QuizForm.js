@@ -30,6 +30,7 @@ const QuizForm = (props) => {
             component={renderInput}
             label="Enter the answer identical to it as it is in the options"
           />
+          <Field name="img" component={renderInput} label="Enter image URL" />
           <button className="ui button primary">Submit</button>
         </form>
       )}

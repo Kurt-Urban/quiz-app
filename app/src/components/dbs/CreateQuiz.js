@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { createQuiz } from "../../reduxStore/quizes";
+import { createQuestion } from "../../reduxStore/quizes";
 import QuizForm from "../reusable/QuizForm";
 
-const CreateQuiz = ({ createQuiz }) => {
+const CreateQuiz = ({ createQuestion }) => {
   const onSubmit = (formValues) => {
-    createQuiz(formValues);
+    createQuestion(formValues);
   };
   return (
     <div>
@@ -15,4 +15,4 @@ const CreateQuiz = ({ createQuiz }) => {
   );
 };
 
-export default connect(null, { createQuiz })(CreateQuiz);
+export default connect(null, { createQuestion })(CreateQuiz);
