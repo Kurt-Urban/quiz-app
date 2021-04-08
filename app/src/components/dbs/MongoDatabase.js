@@ -20,6 +20,7 @@ const MongoDatabase = ({ fetchQuiz, quiz, length }) => {
 
   const index = quiz[currentQuestion];
 
+  //Testing button
   const testState = () => {
     console.log();
   };
@@ -34,7 +35,6 @@ const MongoDatabase = ({ fetchQuiz, quiz, length }) => {
     }
     setValue(null);
   };
-  const startQuiz = () => fetchQuiz();
 
   const renderQuestion = () => {
     if (currentQuestion === null) {
@@ -113,7 +113,7 @@ const MongoDatabase = ({ fetchQuiz, quiz, length }) => {
   return (
     <div>
       <div>
-        <button className="ui button primary" onClick={startQuiz}>
+        <button className="ui button primary" onClick={fetchQuiz}>
           Start New Quiz
         </button>
         <button className="ui button" onClick={testState}>
