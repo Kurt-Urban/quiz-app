@@ -9,7 +9,7 @@ const INITAL_STATE = [];
 
 export const fetchedQuiz = createAction(`${base}FETCHED_QUIZ`);
 export const createNewQuestion = createAction(`${base}CREATE_QUESTION`);
-// export const addVote = createAction(`${base}ADD_VOTE`); Future Feature
+export const addedVote = createAction(`${base}ADDED_VOTE`);
 
 export const fetchQuiz = () => async (dispatch) => {
   const response = await axios.get("/quizes");
@@ -24,11 +24,26 @@ export const createQuestion = (formValues) => (dispatch) => {
       options: formValues.options.split(","),
       answer: formValues.answer,
       img: formValues.img,
+      votes: [0, 0, 0, 0],
     })
     .then(() => {
       dispatch(createNewQuestion());
       history.push("/");
     });
+};
+
+export const addVote = (input) => (dispatch) => {
+  if (input.length !== 0) {
+    axios
+      .post("/update", {
+        id: input[0],
+        voteIndex: input[1],
+      })
+      .then(() => {
+        dispatch(addedVote());
+      });
+  }
+  return;
 };
 
 export default handleActions(

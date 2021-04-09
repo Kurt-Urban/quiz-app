@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Radio } from "semantic-ui-react";
-import { fetchQuiz } from "../../reduxStore/quizes";
+import { fetchQuiz, addVote, addedVote } from "../../reduxStore/quizes";
 
-const MongoDatabase = ({ fetchQuiz, quiz, length }) => {
+const MongoDatabase = ({ fetchQuiz, addVote, quiz, length }) => {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [value, setValue] = useState(null);
   const [score, setScore] = useState(0);
-  // const [optionIndex, setOptionIndex] = useState(null); Future Feature
+  const [optionChoice, setOptionChoice] = useState([]);
 
   useEffect(() => {
     if (length) {
@@ -20,17 +20,19 @@ const MongoDatabase = ({ fetchQuiz, quiz, length }) => {
 
   const index = quiz[currentQuestion];
 
-  //Testing button
   const testState = () => {
-    console.log();
+    console.log(currentQuestion);
   };
 
   const nextClick = () => {
     if (!value) {
       return;
     }
+    setOptionChoice([index._id, index.options.indexOf(value)]);
     setCurrentQuestion(currentQuestion + 1);
-    if (value === index.answer) {
+    addVote(optionChoice);
+    console.log(optionChoice);
+    if (value[0] === index.answer) {
       setScore(score + 1);
     }
     setValue(null);
@@ -41,8 +43,9 @@ const MongoDatabase = ({ fetchQuiz, quiz, length }) => {
       return <div></div>;
     }
     if (currentQuestion === 10) {
+      addedVote(optionChoice);
       return (
-        <div>
+        <div className="ui container">
           <h1 className="header">You Scored {score}/10</h1>
         </div>
       );
@@ -104,7 +107,7 @@ const MongoDatabase = ({ fetchQuiz, quiz, length }) => {
           />
         </div>
         <button className="ui right floated button primary" onClick={nextClick}>
-          Next
+          {currentQuestion === 9 ? "Finish" : "Next"}
         </button>
       </div>
     );
@@ -134,5 +137,5 @@ export default connect(
   (state) => {
     return { quiz: state.quiz, length: state.quiz.length };
   },
-  { fetchQuiz }
+  { fetchQuiz, addVote }
 )(MongoDatabase);

@@ -12,7 +12,7 @@ app.use(bodyParser());
 mongoose
   .connect(
     `mongodb+srv://${env.DB_USER}:${env.DB_PASSWORD}@cluster0.hxtev.mongodb.net/${env.DB_NAME}?retryWrites=true&w=majority`,
-    { useNewUrlParser: true, useUnifiedTopology: true }
+    { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
   )
   .catch((err) => console.log(err));
 
@@ -23,13 +23,12 @@ const quizModel = mongoose.model(
     answer: String,
     options: Array,
     img: String,
-    votes: Array,
+    votes: [0, 0, 0, 0],
   })
 );
 
 app.get("/quizes", (req, res) => {
   quizModel.aggregate([{ $sample: { size: 10 } }], (error, result) => {
-    console.log(result);
     res.send(result);
   });
 });
@@ -38,6 +37,21 @@ app.post("/new", (req, res) => {
   quizModel.create(req.body, (error, result) => {
     res.send(result);
   });
+});
+
+app.post("/update", async (req, res) => {
+  const { votes } = await quizModel.findById(req.body.id);
+  votes[req.body.voteIndex] += 1;
+  quizModel.findByIdAndUpdate(
+    { _id: req.body.id },
+    { votes },
+    (error, result) => {
+      if (error) {
+        res.send(error);
+      }
+      res.send(result);
+    }
+  );
 });
 
 app.listen(port, () => {
