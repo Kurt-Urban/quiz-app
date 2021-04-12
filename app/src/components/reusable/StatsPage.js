@@ -11,25 +11,25 @@ const StatsPage = ({ score, totalQuestions, quiz }) => {
         </h1>
       </div>
       <div>
-        {quiz.map((q, index) => (
+        {quiz.map((key, index) => (
           <div key={index} className="ui padded segment">
-            <h3 className="ui header">{q.question}</h3>
+            <h3 className="ui header">{key.question}</h3>
             {[0, 1, 2, 3].map((n) => (
               <div
                 className={
-                  q.options[n] === q.answer
+                  key.options[n] === key.answer
                     ? "ui inverted green segment"
                     : "ui segment"
                 }
               >
                 <div className="ui two column very relaxed grid">
                   <div className="middle aligned column">
-                    <div className="ui header">{q.options[n]}</div>
+                    <div className="ui header">{key.options[n]}</div>
                   </div>
                   <div className="middle aligned column">
                     <b className="ui red header">
                       {Math.floor(
-                        (q.votes[n] / q.votes.reduce((a, b) => a + b, 0)) *
+                        (key.votes[n] / key.votes.reduce((a, b) => a + b, 0)) *
                           10000
                       ) / 100}
                       %

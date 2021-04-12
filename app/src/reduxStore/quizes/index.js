@@ -55,7 +55,7 @@ export const addVote = (input) => (dispatch) => {
 
 export default handleActions(
   {
-    [fetchedQuiz]: (state, { payload }) => [...state, ...payload],
+    [fetchedQuiz]: (state, { payload }) => [...INITAL_STATE, ...payload],
     [fetchedStats]: (state, { payload }) => [...INITAL_STATE, ...payload],
     [createNewQuestion]: () => ({ ...INITAL_STATE }),
   },
