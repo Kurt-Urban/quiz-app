@@ -2,26 +2,34 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Radio } from "semantic-ui-react";
-import { fetchQuiz, addVote, addedVote } from "../../reduxStore/quizes";
+import { fetchQuiz, addVote, fetchStats } from "../../reduxStore/quizes";
 
-const MongoDatabase = ({ fetchQuiz, addVote, quiz, length }) => {
+import StatsPage from "../reusable/StatsPage";
+
+const MongoDatabase = ({ fetchQuiz, addVote, fetchStats, quiz, length }) => {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [value, setValue] = useState(null);
   const [score, setScore] = useState(0);
   const [optionChoice, setOptionChoice] = useState([]);
+  const [idList, setIdList] = useState([]);
 
   useEffect(() => {
     if (length) {
-      setCurrentQuestion(0);
+      setIdList(quiz.map((a) => a._id));
     }
   }, [length]);
+
+  const startQuiz = async () => {
+    await fetchQuiz();
+    setCurrentQuestion(0);
+  };
 
   const handleChange = (event, { value }) => setValue(value);
 
   const index = quiz[currentQuestion];
 
   const testState = () => {
-    console.log(currentQuestion);
+    setCurrentQuestion(10);
   };
 
   const nextClick = () => {
@@ -31,9 +39,12 @@ const MongoDatabase = ({ fetchQuiz, addVote, quiz, length }) => {
     setOptionChoice([index._id, index.options.indexOf(value)]);
     setCurrentQuestion(currentQuestion + 1);
     addVote(optionChoice);
-    console.log(optionChoice);
-    if (value[0] === index.answer) {
+    if (value === index.answer) {
       setScore(score + 1);
+    }
+    if (currentQuestion === 9) {
+      fetchStats(idList);
+      addVote(optionChoice);
     }
     setValue(null);
   };
@@ -43,10 +54,9 @@ const MongoDatabase = ({ fetchQuiz, addVote, quiz, length }) => {
       return <div></div>;
     }
     if (currentQuestion === 10) {
-      addedVote(optionChoice);
       return (
         <div className="ui container">
-          <h1 className="header">You Scored {score}/10</h1>
+          <StatsPage score={score} totalQuestions={length} />
         </div>
       );
     }
@@ -116,7 +126,7 @@ const MongoDatabase = ({ fetchQuiz, addVote, quiz, length }) => {
   return (
     <div>
       <div>
-        <button className="ui button primary" onClick={fetchQuiz}>
+        <button className="ui button primary" onClick={startQuiz}>
           Start New Quiz
         </button>
         <button className="ui button" onClick={testState}>
@@ -137,5 +147,5 @@ export default connect(
   (state) => {
     return { quiz: state.quiz, length: state.quiz.length };
   },
-  { fetchQuiz, addVote }
+  { fetchQuiz, addVote, fetchStats }
 )(MongoDatabase);

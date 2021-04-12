@@ -29,12 +29,27 @@ const quizModel = mongoose.model(
 
 app.get("/quizes", (req, res) => {
   quizModel.aggregate([{ $sample: { size: 10 } }], (error, result) => {
+    if (error) {
+      res.send(error);
+    }
+    res.send(result);
+  });
+});
+
+app.post("/stats", (req, res) => {
+  quizModel.find({ _id: { $in: req.body.id } }, (error, result) => {
+    if (error) {
+      res.send(error);
+    }
     res.send(result);
   });
 });
 
 app.post("/new", (req, res) => {
   quizModel.create(req.body, (error, result) => {
+    if (error) {
+      res.send(error);
+    }
     res.send(result);
   });
 });

@@ -8,13 +8,20 @@ const base = "QUIZ_";
 const INITAL_STATE = [];
 
 export const fetchedQuiz = createAction(`${base}FETCHED_QUIZ`);
+export const fetchedStats = createAction(`${base}FETCHED_STATS`);
 export const createNewQuestion = createAction(`${base}CREATE_QUESTION`);
 export const addedVote = createAction(`${base}ADDED_VOTE`);
 
 export const fetchQuiz = () => async (dispatch) => {
   const response = await axios.get("/quizes");
-  console.log(response.data);
   dispatch(fetchedQuiz(response.data));
+};
+
+export const fetchStats = (input) => async (dispatch) => {
+  const response = await axios.post("/stats", {
+    id: input,
+  });
+  dispatch(fetchedStats(response.data));
 };
 
 export const createQuestion = (formValues) => (dispatch) => {
@@ -49,6 +56,7 @@ export const addVote = (input) => (dispatch) => {
 export default handleActions(
   {
     [fetchedQuiz]: (state, { payload }) => [...state, ...payload],
+    [fetchedStats]: (state, { payload }) => [...INITAL_STATE, ...payload],
     [createNewQuestion]: () => ({ ...INITAL_STATE }),
   },
   INITAL_STATE
