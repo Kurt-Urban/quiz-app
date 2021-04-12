@@ -4,10 +4,12 @@ import {} from "../../reduxStore/quizes";
 
 const StatsPage = ({ score, totalQuestions, quiz }) => {
   return (
-    <div className="ui container">
-      <h1>
-        You Scored {score}/{totalQuestions}
-      </h1>
+    <div>
+      <div className="ui basic padded segment">
+        <h1>
+          You Scored {score}/{totalQuestions}
+        </h1>
+      </div>
       <div>
         {quiz.map((q, index) => (
           <div key={index} className="ui padded segment">
@@ -21,7 +23,9 @@ const StatsPage = ({ score, totalQuestions, quiz }) => {
                 }
               >
                 <div className="ui two column very relaxed grid">
-                  <div className="middle aligned column">{q.options[n]}</div>
+                  <div className="middle aligned column">
+                    <div className="ui header">{q.options[n]}</div>
+                  </div>
                   <div className="middle aligned column">
                     <b className="ui red header">
                       {Math.floor(

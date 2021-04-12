@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -17,11 +18,14 @@ const MongoDatabase = ({ fetchQuiz, addVote, fetchStats, quiz, length }) => {
     if (length) {
       setIdList(quiz.map((a) => a._id));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [length]);
 
   const startQuiz = async () => {
-    await fetchQuiz();
-    setCurrentQuestion(0);
+    if (!length) {
+      await fetchQuiz();
+      setCurrentQuestion(0);
+    }
   };
 
   const handleChange = (event, { value }) => setValue(value);
@@ -29,7 +33,7 @@ const MongoDatabase = ({ fetchQuiz, addVote, fetchStats, quiz, length }) => {
   const index = quiz[currentQuestion];
 
   const testState = () => {
-    setCurrentQuestion(10);
+    console.log("This button was used for debugging purposes");
   };
 
   const nextClick = () => {
@@ -62,79 +66,86 @@ const MongoDatabase = ({ fetchQuiz, addVote, fetchStats, quiz, length }) => {
     }
     return (
       <div className="ui form container">
-        <div className="ui top aligned centered big rounded image">
-          <img src={index.img} alt={index.question} />
+        <div className="ui basic padded segment">
+          <div className="ui top aligned centered big rounded image">
+            <img src={index.img} alt={index.question} />
+          </div>
+          <div className="ui raised segment">
+            <h3 className="ui header">{index.question}</h3>
+          </div>
+          <div className="field">
+            <Radio
+              label={index.options[0]}
+              name="radioGroup"
+              value={index.options[0]}
+              checked={value === index.options[0]}
+              onChange={handleChange}
+              className={`ui fluid button ${
+                value === index.options[0] ? "primary" : ""
+              }`}
+            />
+          </div>
+          <div className="field">
+            <Radio
+              label={index.options[1]}
+              name="radioGroup"
+              value={index.options[1]}
+              checked={value === index.options[1]}
+              onChange={handleChange}
+              className={`ui fluid button ${
+                value === index.options[1] ? "primary" : ""
+              }`}
+            />
+          </div>
+          <div className="field">
+            <Radio
+              label={index.options[2]}
+              name="radioGroup"
+              value={index.options[2]}
+              checked={value === index.options[2]}
+              onChange={handleChange}
+              className={`ui fluid button ${
+                value === index.options[2] ? "primary" : ""
+              }`}
+            />
+          </div>
+          <div className="field">
+            <Radio
+              label={index.options[3]}
+              name="radioGroup"
+              value={index.options[3]}
+              checked={value === index.options[3]}
+              onChange={handleChange}
+              className={`ui fluid button ${
+                value === index.options[3] ? "primary" : ""
+              }`}
+            />
+          </div>
+          <button
+            className="ui right floated button primary"
+            onClick={nextClick}
+          >
+            {currentQuestion === 9 ? "Finish" : "Next"}
+          </button>
         </div>
-        <div>
-          <h3>{index.question}</h3>
-        </div>
-        <div className="field">
-          <Radio
-            label={index.options[0]}
-            name="radioGroup"
-            value={index.options[0]}
-            checked={value === index.options[0]}
-            onChange={handleChange}
-            className={`ui fluid button ${
-              value === index.options[0] ? "primary" : ""
-            }`}
-          />
-        </div>
-        <div className="field">
-          <Radio
-            label={index.options[1]}
-            name="radioGroup"
-            value={index.options[1]}
-            checked={value === index.options[1]}
-            onChange={handleChange}
-            className={`ui fluid button ${
-              value === index.options[1] ? "primary" : ""
-            }`}
-          />
-        </div>
-        <div className="field">
-          <Radio
-            label={index.options[2]}
-            name="radioGroup"
-            value={index.options[2]}
-            checked={value === index.options[2]}
-            onChange={handleChange}
-            className={`ui fluid button ${
-              value === index.options[2] ? "primary" : ""
-            }`}
-          />
-        </div>
-        <div className="field">
-          <Radio
-            label={index.options[3]}
-            name="radioGroup"
-            value={index.options[3]}
-            checked={value === index.options[3]}
-            onChange={handleChange}
-            className={`ui fluid button ${
-              value === index.options[3] ? "primary" : ""
-            }`}
-          />
-        </div>
-        <button className="ui right floated button primary" onClick={nextClick}>
-          {currentQuestion === 9 ? "Finish" : "Next"}
-        </button>
       </div>
     );
   };
 
   return (
     <div>
-      <div>
-        <button className="ui button primary" onClick={startQuiz}>
+      <div className="ui top fixed menu">
+        <a className="ui item" onClick={startQuiz}>
           Start New Quiz
-        </button>
-        <button className="ui button" onClick={testState}>
+        </a>
+        <a className="ui item" onClick={testState}>
           Test
-        </button>
-        <Link to="new" className="ui button">
-          Add Question
-        </Link>
+        </a>
+        <div className="ui right menu">
+          <div className="ui item">
+            <Link to="/new">Add New Question</Link>
+          </div>
+        </div>
       </div>
       <div className="ui two column centered vertically padded grid">
         {renderQuestion()}

@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Field } from "react-final-form";
+import { Link } from "react-router-dom";
 
 const QuizForm = (props) => {
   const renderInput = ({ input, label }) => {
@@ -31,7 +32,12 @@ const QuizForm = (props) => {
             label="Enter the answer identical to it as it is in the options"
           />
           <Field name="img" component={renderInput} label="Enter image URL" />
-          <button className="ui button primary">Submit</button>
+          <div className="ui basic right aligned segment">
+            <Link to="/" className="ui button">
+              Cancel
+            </Link>
+            <button className="ui button primary">Submit</button>
+          </div>
         </form>
       )}
     </Form>
