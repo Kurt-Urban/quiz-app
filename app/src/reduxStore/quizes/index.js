@@ -12,8 +12,8 @@ export const fetchedStats = createAction(`${base}FETCHED_STATS`);
 export const createNewQuestion = createAction(`${base}CREATE_QUESTION`);
 export const addedVote = createAction(`${base}ADDED_VOTE`);
 
-export const fetchQuiz = () => async (dispatch) => {
-  const response = await axios.get("/quizes");
+export const fetchQuiz = (input) => async (dispatch) => {
+  const response = await axios.post("/quizes", { quizLength: input });
   dispatch(fetchedQuiz(response.data));
 };
 

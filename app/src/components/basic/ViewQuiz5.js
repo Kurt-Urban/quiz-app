@@ -5,9 +5,9 @@ import Header from "../reusable/Header";
 
 import QuizDisplay from "../reusable/QuizDisplay";
 
-const ViewQuiz10 = ({ length, fetchQuiz }) => {
+const ViewQuiz5 = ({ length, fetchQuiz }) => {
   const startQuiz = async () => {
-    await fetchQuiz(10);
+    await fetchQuiz(5);
   };
 
   const testButton = () => {
@@ -18,7 +18,7 @@ const ViewQuiz10 = ({ length, fetchQuiz }) => {
     if (length) {
       return (
         <div>
-          <QuizDisplay currentQ={0} totalQ={10} />
+          <QuizDisplay currentQ={0} totalQ={5} />
         </div>
       );
     }
@@ -45,4 +45,4 @@ export default connect(
     return { length: state.quiz.length };
   },
   { fetchQuiz }
-)(ViewQuiz10);
+)(ViewQuiz5);

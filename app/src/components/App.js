@@ -4,6 +4,7 @@ import { Router, Route, Switch } from "react-router-dom";
 import CreateQuiz from "./basic/CreateQuiz";
 import Home from "./basic/Home";
 import history from "../history";
+import ViewQuiz5 from "./basic/ViewQuiz5";
 import ViewQuiz10 from "./basic/ViewQuiz10";
 
 const App = () => {
@@ -12,6 +13,7 @@ const App = () => {
       <Router history={history}>
         <Switch>
           <Route path="/" exact component={Home} />
+          <Route path="/5" exact component={ViewQuiz5} />
           <Route path="/10" exact component={ViewQuiz10} />
           <Route path="/new" exact component={CreateQuiz} />
         </Switch>

@@ -3,13 +3,15 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-const Header = ({}) => {
+const Header = ({ testButton }) => {
   return (
     <div className="ui top fixed menu">
-      <Link to="10" className="ui item" onClick="">
+      <Link to="/" className="ui item">
         Start New Quiz
       </Link>
-      <div className="ui item">Test</div>
+      <a className="ui item" onClick={testButton}>
+        Test
+      </a>
       <Link to="/new" className="ui right item">
         Add New Question
       </Link>

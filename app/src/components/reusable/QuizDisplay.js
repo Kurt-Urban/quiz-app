@@ -1,14 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { Radio } from "semantic-ui-react";
 import { fetchQuiz, addVote, fetchStats } from "../../reduxStore/quizes";
 import Header from "./Header";
 
 import StatsPage from "./StatsPage";
 
-const QuizDisplay = ({ fetchQuiz, addVote, fetchStats, quiz, length }) => {
+const QuizDisplay = ({
+  addVote,
+  fetchStats,
+  quiz,
+  length,
+  currentQ,
+  totalQ,
+}) => {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [value, setValue] = useState(null);
   const [score, setScore] = useState(0);
@@ -16,23 +22,15 @@ const QuizDisplay = ({ fetchQuiz, addVote, fetchStats, quiz, length }) => {
   const [idList, setIdList] = useState([]);
 
   const handleChange = (event, { value }) => setValue(value);
-  const testState = () => {
-    // console.log("This button was used for debugging purposes");
-    console.log(index);
-  };
   const index = quiz[currentQuestion];
 
   useEffect(() => {
     if (length) {
       setIdList(quiz.map((a) => a._id));
+      setCurrentQuestion(currentQ);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [length]);
-
-  const startQuiz = async () => {
-    await fetchQuiz();
-    setCurrentQuestion(0);
-  };
 
   const nextClick = () => {
     if (!value) {
@@ -44,7 +42,7 @@ const QuizDisplay = ({ fetchQuiz, addVote, fetchStats, quiz, length }) => {
     if (value === index.answer) {
       setScore(score + 1);
     }
-    if (currentQuestion === 9) {
+    if (currentQuestion === totalQ - 1) {
       fetchStats(idList);
       addVote(optionChoice);
     }
@@ -55,7 +53,7 @@ const QuizDisplay = ({ fetchQuiz, addVote, fetchStats, quiz, length }) => {
     if (currentQuestion === null) {
       return <div></div>;
     }
-    if (currentQuestion === 10) {
+    if (currentQuestion === totalQ) {
       return (
         <div className="ui container">
           <StatsPage score={score} totalQuestions={length} />
@@ -98,7 +96,7 @@ const QuizDisplay = ({ fetchQuiz, addVote, fetchStats, quiz, length }) => {
             className="ui right floated button primary"
             onClick={nextClick}
           >
-            {currentQuestion === 9 ? "Finish" : "Next"}
+            {currentQuestion === totalQ - 1 ? "Finish" : "Next"}
           </button>
         </div>
       </div>
@@ -107,7 +105,7 @@ const QuizDisplay = ({ fetchQuiz, addVote, fetchStats, quiz, length }) => {
 
   return (
     <div>
-      <Header startQuiz={startQuiz} />
+      <Header />
       <div className="ui two column centered vertically padded grid">
         {renderQuestion()}
       </div>
