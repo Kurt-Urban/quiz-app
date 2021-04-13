@@ -11,6 +11,7 @@ export const fetchedQuiz = createAction(`${base}FETCHED_QUIZ`);
 export const fetchedStats = createAction(`${base}FETCHED_STATS`);
 export const createNewQuestion = createAction(`${base}CREATE_QUESTION`);
 export const addedVote = createAction(`${base}ADDED_VOTE`);
+export const newQuiz = createAction(`${base}NEW_QUIZ`);
 
 export const fetchQuiz = (input) => async (dispatch) => {
   const response = await axios.post("/quizes", { quizLength: input });
@@ -58,6 +59,7 @@ export default handleActions(
     [fetchedQuiz]: (state, { payload }) => [...INITAL_STATE, ...payload],
     [fetchedStats]: (state, { payload }) => [...INITAL_STATE, ...payload],
     [createNewQuestion]: () => ({ ...INITAL_STATE }),
+    [newQuiz]: () => [...INITAL_STATE],
   },
   INITAL_STATE
 );
