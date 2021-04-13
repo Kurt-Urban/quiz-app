@@ -4,7 +4,9 @@ This is my first fully functional project using react. This project also utliliz
 Should you wish use this app, it will require your to create a .env file in the root server folder. The variable created inside the folder should be as follows: 
 
 DB_USER=username
+
 DB_PASSWORD=password
+
 DB_NAME=databaseName
 
 You must add at least 10 questions of your own to mongoDB for the app to be functional.
